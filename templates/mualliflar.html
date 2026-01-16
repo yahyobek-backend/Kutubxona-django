@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Mualliflar</h1>
+<hr>
+<a href="/">Bosh sahifa</a>
+<ol>
+    {% for muallif in mualliflar %}
+    <li>
+        <a href="/mualliflar/{{ muallif.id }}/">{{ muallif.name }}</a>
+    </li>
+    {% endfor %}
+</ol>
+</body>
+</html>

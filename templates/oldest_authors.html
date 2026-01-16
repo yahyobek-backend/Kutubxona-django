@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Eng yoshi katta mualliflar</h1>
+<hr>
+<a href="/">Bosh sahifa</a>
+<ol>
+    {% for author in authors %}
+    <li>
+        {{ author.name }} - {{ author.birth_of_date }}
+    </li>
+    {% endfor %}
+</ol>
+</body>
+</html>

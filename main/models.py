@@ -51,8 +51,8 @@ class Record(models.Model):
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True)
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True)
     librarian = models.ForeignKey(Librarian, on_delete=models.SET_NULL, null=True, blank=True)
-    take_off_date = models.DateField(auto_now_add=True)
+    birth_off_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.student.name} [{self.book.title}]'
+        return f'{self.student.name} [{self.book.title if self.book else "Kitob mavjud emas !"}]'

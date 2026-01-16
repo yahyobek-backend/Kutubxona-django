@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1> {{ record.id }} - record ma'lumotlari</h1>
+<hr>
+
+<a href="/recordlar/">Barcha recordlar</a>
+<br>
+
+<p>Student: {{ record.student.name }}</p>
+<p>Kitob: {{ record.book.title }}</p>
+<p>Kutubxonachi: {{ record.librarian.name }}</p>
+<p>Olgan sana : {{ record.birth_off_date }}</p>
+
+</body>
+</html>

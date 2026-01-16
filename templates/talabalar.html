@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Talabalar</h1>
+<hr>
+<a href="/">Bosh sahifa</a>
+<ol>
+    {% for talaba in talabalar %}
+    <li>
+      <a href="/talabalar/{{ talaba.id }}/">{{ talaba.name }}</a>
+    </li>
+    {% endfor %}
+</ol>
+
+</body>
+</html>

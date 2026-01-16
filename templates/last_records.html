@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Eng oxirgi rekordlar</h1>
+<hr>
+<a href="/">Bosh sahifa</a>
+<ol>
+    {% for record in records %}
+    <li>
+        {{ record.student.name }} - {{ record.birth_off_date }}
+    </li>
+    {% endfor %}
+</ol>
+
+</body>
+</html>

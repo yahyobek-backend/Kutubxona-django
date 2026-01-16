@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Kitobi 10 tadan kichik mualliflar</h1>
+<hr>
+<a href="/">Bosh sahifa</a>
+<ol>
+    {% for author in authors %}
+    <li>
+        {{ author.name }} - {{ author.books }}
+    </li>
+    {% endfor %}
+</ol>
+</body>
+</html>
