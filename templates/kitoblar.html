@@ -8,12 +8,30 @@
 <h1>Barcha kitoblar:</h1>
 <hr>
 <a href="/">Bosh sahifa</a>
-<ol>
+
     {% for kitob in kitoblar %}
-    <li>
-        <a href="/kitoblar/{{ kitob.id }}/">{{ kitob.title }}</a>
-    </li>
+
+        <p> {{ forloop.counter }}. <a href="/kitoblar/{{ kitob.id }}/">{{ kitob.title }}</a></p>
+
     {% endfor %}
-</ol>
+
+    <hr>
+    <h3>Yangi kitob qo'shish</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label for="nom">Kitob nomi:</label>
+        <input type="text" name="nom" id="nom" required><br><br>
+            <label for="janr">Janr:</label>
+        <input type="text" name="janr" id="janr" required><br><br>
+        <label for="sahifa">Sahifalar soni:</label>
+        <input type="number" name="sahifa" id="sahifa" required><br><br>
+        <label for="muallif">Muallif:</label>
+        <select name="muallif_id" id="muallif">
+            {% for muallif in mualliflar %}
+                <option value="{{ muallif.id }}">{{ muallif.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Kitobni qo'shish</button>
+    </form>
 </body>
 </html>

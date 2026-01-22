@@ -8,13 +8,24 @@
 <h1>Talabalar</h1>
 <hr>
 <a href="/">Bosh sahifa</a>
-<ol>
     {% for talaba in talabalar %}
-    <li>
-      <a href="/talabalar/{{ talaba.id }}/">{{ talaba.name }}</a>
-    </li>
+        <p> {{ forloop.counter }}. <a href="/talabalar/{{ talaba.id }}/">{{ talaba.name }}</a></p>
     {% endfor %}
-</ol>
 
+    <hr>
+    <h3>Yangi talaba qo'shish</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label for="ism">Ism:</label>
+        <input type="text" name="ism" id="ism" required><br><br>
+        <label for="guruh">Guruh:</label>
+        <input type="text" name="guruh" id="guruh" required><br><br>
+        <label for="kurs">Kurs:</label>
+        <input type="number" name="kurs" id="kurs"><br><br>
+        <label for="kitob_soni">Kitob soni:</label>
+        <input type="number" name="kitob_soni" id="kitob_soni"><br><br>
+        <br>
+        <button type="submit">Talabani qo'shish</button>
+    </form>
 </body>
 </html>

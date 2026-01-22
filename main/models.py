@@ -41,7 +41,7 @@ class Book(models.Model):
 
 class Librarian(models.Model):
     name = models.CharField(max_length=100)
-    time_of_work = models.DurationField(null=True, blank=True)
+    time_of_work = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name

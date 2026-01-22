@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 # Create your views here.
@@ -17,7 +17,16 @@ def home_page(request):
 
 
 def talabalar_view(request):
-    talabalar = Student.objects.all()
+    if request.method == "POST":
+        Student.objects.create(
+            name=request.POST.get('ism'),
+            group=request.POST.get('guruh'),
+            course=request.POST.get('kurs') if request.POST.get('kurs') != "" else 1,
+            number_of_books=request.POST.get('kitob_soni') if request.POST.get('kitob_soni') != "" else 0,
+        )
+        return redirect('talabalar')
+
+    talabalar = Student.objects.order_by('name')
 
     context = {
         'talabalar': talabalar
@@ -26,7 +35,20 @@ def talabalar_view(request):
 
 
 def mualliflar_view(request):
-    mualliflar = Author.objects.all()
+    if request.method == 'POST':
+        is_alive_str = request.POST.get('is_alive')
+        is_alive = is_alive_str == 'True'
+
+        Author.objects.create(
+            name=request.POST.get('ism'),
+            gender=request.POST.get('gender'),
+            birth_of_date=request.POST.get('t_kun'),
+            books=request.POST.get('kitoblar_soni'),
+            is_alive=is_alive
+        )
+        return redirect('mualliflar')
+
+    mualliflar = Author.objects.order_by('name')
 
     context = {
         'mualliflar': mualliflar
@@ -53,19 +75,43 @@ def muallif_view(request, muallif_id):
 
 
 def kitoblar_view(request):
-    kitoblar = Book.objects.all()
+    if request.method == "POST":
+        Book.objects.create(
+            title=request.POST.get('nom'),
+            genre=request.POST.get('janr'),
+            pages=request.POST.get('sahifa'),
+            author=Author.objects.get(id=request.POST.get('muallif_id')),
+        )
+        return redirect('kitoblar')
+    kitoblar = Book.objects.order_by('title')
+    mualliflar = Author.objects.order_by('name')
     context = {
-        'kitoblar': kitoblar
+        'kitoblar': kitoblar,
+        'mualliflar': mualliflar
     }
     return render(request, 'kitoblar.html', context)
 
 def librarians_view(request):
+    if request.method == "POST":
+        Librarian.objects.create(
+            name=request.POST.get('ism'),
+            time_of_work=request.POST.get('ish_vaqti'),
+        )
+        return redirect('kutubxonachilar')
     librarians = Librarian.objects.all()
     context = {
         'librarians': librarians
     }
 
     return render(request, 'librarians.html', context)
+
+def librarian_view(request, librarian_id):
+    librarian = Librarian.objects.get(id=librarian_id)
+
+    context = {
+        'librarian': librarian
+    }
+    return render(request, 'librarian-details.html', context)
 
 def kitob_view(request, kitob_id):
     book = Book.objects.get(id=kitob_id)
@@ -75,13 +121,24 @@ def kitob_view(request, kitob_id):
     }
     return render(request, 'kitob-details.html', context)
 
-
 def records_view(request):
-    records = Record.objects.all()
+    if request.method == "POST":
+        Record.objects.create(
+            student=Student.objects.get(id=request.POST.get('talaba_id')),
+            book=Book.objects.get(id=request.POST.get('kitob_id')),
+            librarian=Librarian.objects.get(id=request.POST.get('kutubxonachi_id')),
+            birth_off_date=request.POST.get('olish_sana'),
+            return_date=request.POST.get('qaytarish_sana'),
+        )
+        return redirect('recordlar')
+
     context = {
-        'records': records
-    }
-    return render(request, 'records.html', context)
+            "records": Record.objects.all(),
+            "talabalar": Student.objects.all(),
+            "kitoblar": Book.objects.all(),
+            "librarians": Librarian.objects.all(),
+        }
+    return render(request, "records.html", context)
 
 
 def live_authors(request):
@@ -160,3 +217,4 @@ def graduate_students_view(request):
         'records': records
     }
     return render(request, 'graduate_students.html', content)
+

@@ -8,12 +8,19 @@
 <h1>Kutubxonachilar</h1>
 <hr>
 <a href="/">Bosh sahifa</a>
-<ol>
+
     {% for librarian in librarians %}
-    <li>
-      {{ librarian.name }}
-    </li>
+        <p>{{ forloop.counter }}. <a href="/kutubxonachilar/{{ librarian.id }}/">{{ librarian.name }}</a></p>
     {% endfor %}
-</ol>
+<hr>
+    <h3>Yangi kutubxonachi qo'shish</h3>
+        <form method="post">
+            {% csrf_token %}
+        <label for="ism">Kutubxonachi ismi:</label>
+        <input type="text" name="ism" id="ism" required><br><br>
+            <label for="ish_vaqti">Ish vaqti</label>
+            <input type="text" name="ish_vaqti" id="ish_vaqti">
+            <button type="submit">Kutubxonchini qo'shish</button>
+        </form>
 </body>
 </html>
