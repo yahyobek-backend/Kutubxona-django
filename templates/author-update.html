@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ author.name }} ma'lumotlarini o'zgartirish</title>
 </head>
 <body>
+    <h1>{{ author.name }} ma'lumotlarini o'zgartirish</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Ism:</label>
+        <input type="text" name="ism" id="name" value="{{ author.name }}"><br><br>
 
+        <label for="gender">Jins:</label>
+        <select name="jins" id="gender">
+            <option value="Erkak" {% if author.gender == 'Erkak' %}selected{% endif %}>Erkak</option>
+            <option value="Ayol" {% if author.gender == 'Ayol' %}selected{% endif %}>Ayol</option>
+        </select><br><br>
+
+        <label for="birth_date">Tug'ilgan sana:</label>
+        <input type="date" name="t_sana" id="birth_date" value="{{ author.birth_of_date|date:'Y-m-d' }}"><br><br>
+
+        <label for="number_books">Kitob soni:</label>
+        <input type="number" name="kitob_soni" id="number_books" value="{{ author.books }}"><br><br>
+
+        <label for="is_alive">Tirik</label>
+        <input type="checkbox" name="tirik" id="is_alive" {% if author.is_alive %} checked {% endif %}><br><br>
+
+        <button type="submit">Saqlash</button>
+    </form>
 </body>
 </html>

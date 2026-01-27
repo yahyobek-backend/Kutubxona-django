@@ -12,7 +12,9 @@
     {% for kitob in kitoblar %}
 
         <p> {{ forloop.counter }}. <a href="/kitoblar/{{ kitob.id }}/">{{ kitob.title }}</a></p>
-
+        <a href="{% url 'kitob-update' kitob.id %}">
+            <button>Edit</button>
+        </a>
     {% endfor %}
 
     <hr>

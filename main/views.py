@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 # Create your views here.
@@ -33,6 +33,28 @@ def talabalar_view(request):
     }
     return render(request, 'talabalar.html', context)
 
+def talaba_view(request, talaba_id):
+    student = Student.objects.get(id=talaba_id)
+
+    context = {
+        'student': student
+    }
+    return render(request, 'talaba-details.html', context)
+
+def update_talaba_view(request, pk):
+    student = get_object_or_404(Student, id=pk)
+    if request.method == "POST":
+        student.name = request.POST.get('ism')
+        student.group = request.POST.get('guruh')
+        student.course = request.POST.get('kurs')
+        student.number_of_books = request.POST.get('kitob_soni')
+        student.save()
+        return redirect('talabalar')
+
+    context={
+        'student': student
+    }
+    return render(request, 'talaba-update.html', context)
 
 def mualliflar_view(request):
     if request.method == 'POST':
@@ -56,14 +78,6 @@ def mualliflar_view(request):
     return render(request, 'mualliflar.html', context)
 
 
-def talaba_view(request, talaba_id):
-    student = Student.objects.get(id=talaba_id)
-
-    context = {
-        'student': student
-    }
-    return render(request, 'talaba-details.html', context)
-
 
 def muallif_view(request, muallif_id):
     author = Author.objects.get(id=muallif_id)
@@ -72,6 +86,37 @@ def muallif_view(request, muallif_id):
         'author': author
     }
     return render(request, 'muallif-details.html', context)
+
+from datetime import datetime
+
+def update_muallif_view(request, pk):
+    author = get_object_or_404(Author, id=pk)
+
+    if request.method == "POST":
+        # 't_sana' dan sana olish
+        birth_date_str = request.POST.get('t_sana')
+        birth_date = None
+        if birth_date_str:
+            try:
+                birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+            except ValueError:
+                birth_date = None  # Agar noto'g'ri format bo'lsa, None qo'y
+
+        # Yangilash
+        Author.objects.filter(id=pk).update(
+            name=request.POST.get('ism', ''),
+            gender=request.POST.get('jins', ''),
+            birth_of_date=birth_date,  # To'g'ri formatda
+            books=request.POST.get('kitob_soni', None),
+            is_alive=request.POST.get('tirik') == 'on'  # Checkbox: 'on' bo'lsa True
+        )
+        return redirect('mualliflar')
+
+    context = {
+        "author": author
+    }
+    return render(request, 'author-update.html', context)
+
 
 
 def kitoblar_view(request):
@@ -90,6 +135,34 @@ def kitoblar_view(request):
         'mualliflar': mualliflar
     }
     return render(request, 'kitoblar.html', context)
+
+def kitob_view(request, kitob_id):
+    book = Book.objects.get(id=kitob_id)
+
+    context = {
+        'book': book
+    }
+    return render(request, 'kitob-details.html', context)
+
+def update_kitob_view(request, pk):
+    book = get_object_or_404(Book, id=pk)
+
+    if request.method == "POST":
+        book.title = request.POST.get('nom')
+        book.genre = request.POST.get('janr')
+        book.pages = request.POST.get('sahifa')
+        book.author = get_object_or_404(Author, id=request.POST.get('muallif_id'))
+        book.save()   # MUHIM: o‘zgarishlarni bazaga saqlash
+        return redirect('kitoblar')
+
+    # Agar GET bo‘lsa, formani ko‘rsatish
+    authors = Author.objects.all().order_by('name')
+    context = {
+        'book': book,
+        "authors": authors
+    }
+    return render(request, 'kitob-update.html', context)
+
 
 def librarians_view(request):
     if request.method == "POST":
@@ -113,13 +186,20 @@ def librarian_view(request, librarian_id):
     }
     return render(request, 'librarian-details.html', context)
 
-def kitob_view(request, kitob_id):
-    book = Book.objects.get(id=kitob_id)
+def update_librarian_view(request, pk):
+    librarian = get_object_or_404(Librarian, id=pk)
+
+    if request.method == "POST":
+        librarian.name = request.POST.get('ism')
+        librarian.time_of_work = request.POST.get('ish_vaqti')
+        librarian.save()
+        return redirect('kutubxonachilar')
 
     context = {
-        'book': book
+        'librarian': librarian
     }
-    return render(request, 'kitob-details.html', context)
+    return render(request, 'librarian-update.html', context)
+
 
 def records_view(request):
     if request.method == "POST":
@@ -140,9 +220,25 @@ def records_view(request):
         }
     return render(request, "records.html", context)
 
+def record_view(request, record_id):
+    record = Record.objects.get(id=record_id)
+
+    content = {
+        'record': record
+    }
+    return render(request, 'record-details.html', content)
+
+def record_update_view(request, pk):
+    record = get_object_or_404(Record, id=pk)
+
+    content = {
+        'record': record
+    }
+    return render(request, 'record-update.html', content)
 
 def live_authors(request):
     authors = Author.objects.filter(is_alive=True)
+
     context = {
         'authors': authors
     }
@@ -152,6 +248,7 @@ def live_authors(request):
 
 def big_books(request):
     books = Book.objects.order_by('-pages')[:3]
+
     context = {
         'books': books
     }
@@ -160,6 +257,7 @@ def big_books(request):
 
 def authors_of_books(request):
     books = Author.objects.order_by('-books')[:3]
+
     context = {
         'books': books
     }
@@ -168,6 +266,7 @@ def authors_of_books(request):
 
 def last_records(request):
     records = Record.objects.order_by('-birth_off_date')[:3]
+
     context = {
         'records': records
     }
@@ -176,6 +275,7 @@ def last_records(request):
 
 def live_authors_of_books(request):
     books = Book.objects.filter(author__is_alive=True)
+
     content = {
         'books': books
     }
@@ -183,6 +283,7 @@ def live_authors_of_books(request):
 
 def artistic_books(request):
     books = Book.objects.filter(genre='badiiy')
+
     content = {
         'books': books
     }
@@ -190,6 +291,7 @@ def artistic_books(request):
 
 def oldest_authors(request):
     authors = Author.objects.order_by('birth_of_date')[:3]
+
     content = {
         'authors': authors
     }
@@ -197,18 +299,12 @@ def oldest_authors(request):
 
 def fewer_10_books_authors(request):
     authors = Author.objects.filter(books__lt=10)
+
     content = {
         'authors': authors
     }
     return render(request, 'fewer_10_books_authors.html', content)
 
-def record_view(request, record_id):
-    record = Record.objects.get(id=record_id)
-
-    content = {
-        'record': record
-    }
-    return render(request, 'record-details.html', content)
 
 def graduate_students_view(request):
     records = Record.objects.filter(student__course=4)
@@ -217,4 +313,3 @@ def graduate_students_view(request):
         'records': records
     }
     return render(request, 'graduate_students.html', content)
-

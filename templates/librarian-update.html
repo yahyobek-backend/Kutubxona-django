@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+    <h1>{{ librarian.name }} ma'lumotlarini o'zgartirish ></h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Ism: </label>
+        <input type="text" name="ism" id="name" value="{{ librarian.name }}">
+        <br><br>
+        <label for="time_of_work">Ish vaqti: </label>
+        <input type="text" name="ish_vaqti" id="time_of_work" value="{{ librarian.time_of_work }}">
+        <br><br>
+        <button type="submit">Saqlash</button>
+    </form>
 </body>
 </html>

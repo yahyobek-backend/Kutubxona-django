@@ -2,25 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Kutubxonachilar</title>
 </head>
 <body>
-<h1>Kutubxonachilar</h1>
-<hr>
-<a href="/">Bosh sahifa</a>
+    <h1>Kutubxonachilar</h1>
+    <hr>
+    <a href="/">Bosh sahifa</a>
 
     {% for librarian in librarians %}
-        <p>{{ forloop.counter }}. <a href="/kutubxonachilar/{{ librarian.id }}/">{{ librarian.name }}</a></p>
+        <p>
+            {{ forloop.counter }}.
+            <a href="/kutubxonachilar/{{ librarian.id }}/">{{ librarian.name }}</a>
+            <!-- Tahrirlash tugmasi har bir kutubxonachi uchun -->
+            <a href="{% url 'kutubxonachi-update' librarian.pk %}">
+                <button type="button">Tahrirlash</button>
+            </a>
+        </p>
     {% endfor %}
-<hr>
+
+    <hr>
     <h3>Yangi kutubxonachi qo'shish</h3>
-        <form method="post">
-            {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
         <label for="ism">Kutubxonachi ismi:</label>
         <input type="text" name="ism" id="ism" required><br><br>
-            <label for="ish_vaqti">Ish vaqti</label>
-            <input type="text" name="ish_vaqti" id="ish_vaqti">
-            <button type="submit">Kutubxonchini qo'shish</button>
-        </form>
+
+        <label for="ish_vaqti">Ish vaqti:</label>
+        <input type="text" name="ish_vaqti" id="ish_vaqti"><br><br>
+
+        <button type="submit">Kutubxonchini qo'shish</button>
+    </form>
 </body>
 </html>

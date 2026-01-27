@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+    <h1>{{ book.title }} ma'lumotlarini o'zgartirish ></h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">Nom: </label>
+        <input type="text" name="nom" id="title" value="{{ book.title }}">
+        <br><br>
+        <label for="genre">Janr: </label>
+        <input type="text" name="janr" id="genre" value="{{ book.genre }}">
+        <br><br>
+        <label for="pages">Janr: </label>
+        <input type="number" name="sahifa" id="pages" value="{{ book.pages }}">
+        <br><br>
+        <label for="author">Muallif: </label>
+        <select name="muallif_id" id="author">
+             {% for author in authors %}
+            <option value="{{ author.id }}" {% if book.author.id == author.id %} selected {% endif %}>{{ author.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Saqlash</button>
+    </form>
 </body>
 </html>

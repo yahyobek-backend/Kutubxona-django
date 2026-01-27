@@ -9,7 +9,17 @@
 <hr>
 <a href="/">Bosh sahifa</a>
     {% for talaba in talabalar %}
-        <p> {{ forloop.counter }}. <a href="/talabalar/{{ talaba.id }}/">{{ talaba.name }}</a></p>
+        <p>
+            {{ forloop.counter }}.
+            <a href="/talabalar/{{ talaba.id }}/">
+                {{ talaba.name }}
+            </a>
+            <a href="{% url 'talaba-update' talaba.id %}">
+                <button>
+                    Tahrirlash
+                </button>
+            </a>
+        </p>
     {% endfor %}
 
     <hr>

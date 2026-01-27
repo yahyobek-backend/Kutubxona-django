@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+
+    <h1>{{ student.name }} ma'lumotlarini o'zgartirish ></h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Ism:</label>
+        <input type="text" name="ism" id="name" value="{{ student.name }}"><br><br>
+        <label for="group">Guruh:</label>
+        <input type="text" name="guruh" id="group" value="{{ student.group }}"><br><br>
+        <label for="course">Kurs:</label>
+        <input type="number" name="kurs" id="course" value="{{ student.course }}"><br><br>
+        <label for="number_books">Kitob soni:</label>
+        <input type="number" name="kitob_soni" id="number_books" value="{{ student.number_of_books }}"><br><br>
+        <hr>
+        <button type="submit">Saqlash</button>
+        <a href="/talabalar/">
+            <button type="button">Bekor qilish</button>
+        </a>
+    </form>
+
 </body>
 </html>

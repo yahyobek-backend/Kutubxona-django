@@ -9,7 +9,14 @@
     <hr>
     <a href="/">Bosh sahifa</a>
     {% for muallif in mualliflar %}
-        <p>{{ forloop.counter }}. <a href="/mualliflar/{{ muallif.id }}/">{{ muallif.name }}</a></p>
+        <p>{{ forloop.counter }}.
+            <a href="/mualliflar/{{ muallif.id }}/">
+                {{ muallif.name }}
+            </a>
+            <button>
+                <a href="{% url 'muallif-update' muallif.id %}">Tahrirlash</a>
+            </button>
+        </p>
     {% endfor %}
 
     <hr>

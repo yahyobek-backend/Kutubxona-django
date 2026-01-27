@@ -19,7 +19,7 @@ class Author(models.Model):
         AYOL = 'Ayol', 'Ayol'
     name = models.CharField(max_length=100)
     gender = models.CharField(choices=GENDER_CHOICES.choices, max_length=10, blank=True, null=True)
-    birth_of_date = models.DateField()
+    birth_of_date = models.DateField(null=True, blank=True)
     books = models.PositiveSmallIntegerField(blank=True, null=True)
     is_alive = models.BooleanField(default=False)
 
@@ -29,7 +29,7 @@ class Author(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    genre = models.CharField(max_length=100)
+    genre = models.CharField(max_length=100, null=True, blank=True)
     pages = models.PositiveIntegerField()
     author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)
 
