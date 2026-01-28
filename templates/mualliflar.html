@@ -23,28 +23,7 @@
     <h3>Yangi muallif qo'shish</h3>
     <form method="post">
         {% csrf_token %}
-
-        <label for="ism">Muallif ismi:</label>
-        <input type="text" name="ism" id="ism" required><br><br>
-
-        <span>Jinsi:</span><br>
-        <input type="radio" name="gender" id="erkak" value="male">
-        <label for="erkak">Erkak</label><br>
-        <input type="radio" name="gender" id="ayol" value="female">
-        <label for="ayol">Ayol</label><br><br>
-
-        <label for="t_kun">Tug'ilgan sana:</label>
-        <input type="date" name="t_kun" id="t_kun" required><br><br>
-
-        <label for="kitoblar_soni">Kitoblar soni:</label>
-        <input type="number" name="kitoblar_soni" id="kitoblar_soni" required><br><br>
-
-        <span>Holati:</span><br>
-        <input type="radio" name="is_alive" id="tirik" value="True" required>
-        <label for="tirik">Tirik</label><br>
-        <input type="radio" name="is_alive" id="vafot_etgan" value="False" required>
-        <label for="vafot_etgan">Vafot etgan</label><br><br>
-
+        {{ form.as_p }}
         <button type="submit">Yangi muallifni qo'shish</button>
     </form>
 </body>

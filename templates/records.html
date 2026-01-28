@@ -26,28 +26,7 @@
     <h3>Yangi record qo'shish</h3>
     <form method="post">
         {% csrf_token %}
-        <label for="talaba">Talaba:</label>
-        <select name="talaba_id" id="talaba">
-            {% for talaba in talabalar %}
-                <option value="{{ talaba.id }}">{{ talaba.name }}</option>
-            {% endfor %}
-        </select><br><br>
-        <label for="kitob">Kitob:</label>
-        <select name="kitob_id" id="kitob">
-            {% for kitob in kitoblar %}
-                <option value="{{ kitob.id }}">{{ kitob.title }}</option>
-            {% endfor %}
-        </select><br><br>
-                <label for="kutubxonachi">Kutubxonachi:</label>
-        <select name="kutubxonachi_id" id="kutubxonachi">
-            {% for librarian in librarians %}
-                <option value="{{ librarian.id }}">{{ librarian.name }}</option>
-            {% endfor %}
-        </select><br><br>
-        <label for="olish_sana">Kitob berilgan sana:</label>
-        <input type="date" name="olish_sana" id="olish_sana" required><br><br>
-        <label for="qaytarish_sana">Kitob qaytariladigan sana:</label>
-        <input type="date" name="qaytarish_sana" id="qaytarish_sana" required><br><br>
+        {{ form.as_p }}
         <button type="submit">Recordni  qo'shish</button>
     </form>
 </body>

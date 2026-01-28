@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 # Create your views here.
-from .models import *
 from .forms import *
 
 
@@ -58,23 +57,18 @@ def update_talaba_view(request, pk):
     return render(request, 'talaba-update.html', context)
 
 def mualliflar_view(request):
+    form = AuthorForm()
     if request.method == 'POST':
-        is_alive_str = request.POST.get('is_alive')
-        is_alive = is_alive_str == 'True'
-
-        Author.objects.create(
-            name=request.POST.get('ism'),
-            gender=request.POST.get('gender'),
-            birth_of_date=request.POST.get('t_kun'),
-            books=request.POST.get('kitoblar_soni'),
-            is_alive=is_alive
-        )
+        form = AuthorForm(request.POST)
+        if form.is_valid():
+            form.save()
         return redirect('mualliflar')
 
     mualliflar = Author.objects.order_by('name')
 
     context = {
-        'mualliflar': mualliflar
+        'mualliflar': mualliflar,
+        'form': form
     }
     return render(request, 'mualliflar.html', context)
 
@@ -121,18 +115,20 @@ def update_muallif_view(request, pk):
 
 
 def kitoblar_view(request):
-    form = BookForm()
-    if request.method == "POST":
-        form = BookForm(request.POST)
-        if form.is_valid():
-            form.save()
+    if request.method == 'POST':
+
+        Book.objects.create(
+            title=request.POST.get('nom'),
+            genre=request.POST.get('janr'),
+            pages=request.POST.get('sahifa'),
+            author=Author.objects.get(id=request.POST.get('muallif_id')),
+        )
         return redirect('kitoblar')
     kitoblar = Book.objects.order_by('title')
     mualliflar = Author.objects.order_by('name')
     context = {
         'kitoblar': kitoblar,
         'mualliflar': mualliflar,
-        'form': form
     }
     return render(request, 'kitoblar.html', context)
 
@@ -202,14 +198,11 @@ def update_librarian_view(request, pk):
 
 
 def records_view(request):
+    form = RecordForm()
     if request.method == "POST":
-        Record.objects.create(
-            student=Student.objects.get(id=request.POST.get('talaba_id')),
-            book=Book.objects.get(id=request.POST.get('kitob_id')),
-            librarian=Librarian.objects.get(id=request.POST.get('kutubxonachi_id')),
-            birth_off_date=request.POST.get('olish_sana'),
-            return_date=request.POST.get('qaytarish_sana'),
-        )
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            form.save()
         return redirect('recordlar')
 
     context = {
@@ -217,6 +210,7 @@ def records_view(request):
             "talabalar": Student.objects.all(),
             "kitoblar": Book.objects.all(),
             "librarians": Librarian.objects.all(),
+            'form': form
         }
     return render(request, "records.html", context)
 
