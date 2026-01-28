@@ -8,13 +8,19 @@
 <h1>Recordlar</h1>
 <hr>
 <a href="/">Bosh sahifa</a>
-<ol>
     {% for record in records %}
-    <li>
-        <a href="/recordlar/{{ record.id }}/">{{ record.student.name }} - {{ record.book.title }}</a>
-    </li>
+    <p>
+        {{ forloop.counter }}.
+        <a href="/recodlar/{{ record.id }}/">
+            {{ record.student.name }}
+        </a>
+        <a href="{% url 'record-update' record.id %}">
+            <button>
+                Tahrirlash
+            </button>
+        </a>
+    </p>
     {% endfor %}
-</ol>
 
     <hr>
     <h3>Yangi record qo'shish</h3>

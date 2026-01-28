@@ -5,6 +5,35 @@
     <title>Title</title>
 </head>
 <body>
+    <h1>{{ record.student.name }} ma'lumotlarini o'zgartirish ></h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        <label for="student">Talaba: </label>
+        <select name="student_id" id="student">
+             {% for student in students %}
+            <option value="{{ student.id }}" {% if record.student.id == student.id %} selected {% endif %}>{{ student.name }}</option>
+            {% endfor %}
+        </select>
 
+        <label for="book">Kitob: </label>
+        <select name="book_id" id="book">
+             {% for book in books %}
+            <option value="{{ book.id }}" {% if record.book.id == book.id %} selected {% endif %}>{{ book.title }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="librarian">Kutubxonachi: </label>
+        <select name="librarian_id" id="librarian">
+             {% for librarian in librarians %}
+            <option value="{{ librarian.id }}" {% if record.librarian.id == librarian.id %} selected {% endif %}>{{ librarian.name }}</option>
+            {% endfor %}
+        </select>
+            <label for="take_date">Olingan sana: </label>
+            <input type="date" name="olingan_sana" id="take_date" value="{{ record.birth_off_date|date:'Y-m-d' }}">
+            <labeel for="return_date">Qaytariladigan sana: </labeel>
+            <input type="date" name="qaytariladigan_sana" id="return_date" value="{{ record.return_date|date:'Y-m-d' }}">
+        <button type="submit">Saqlash</button>
+    </form>
 </body>
 </html>

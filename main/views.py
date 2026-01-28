@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 from .models import *
+from .forms import *
 
 
 def home_view(request):
@@ -120,19 +121,18 @@ def update_muallif_view(request, pk):
 
 
 def kitoblar_view(request):
+    form = BookForm()
     if request.method == "POST":
-        Book.objects.create(
-            title=request.POST.get('nom'),
-            genre=request.POST.get('janr'),
-            pages=request.POST.get('sahifa'),
-            author=Author.objects.get(id=request.POST.get('muallif_id')),
-        )
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
         return redirect('kitoblar')
     kitoblar = Book.objects.order_by('title')
     mualliflar = Author.objects.order_by('name')
     context = {
         'kitoblar': kitoblar,
-        'mualliflar': mualliflar
+        'mualliflar': mualliflar,
+        'form': form
     }
     return render(request, 'kitoblar.html', context)
 
@@ -230,9 +230,22 @@ def record_view(request, record_id):
 
 def record_update_view(request, pk):
     record = get_object_or_404(Record, id=pk)
-
+    if request.method == "POST":
+        record.student = get_object_or_404(Student, id=request.POST.get('student_id'))
+        record.book = get_object_or_404(Book, id=request.POST.get('book_id'))
+        record.librarian = get_object_or_404(Librarian, id=request.POST.get('librarian_id'))
+        record.birth_off_date = request.POST.get('olingan_sana')
+        record.return_date = request.POST.get('qaytariladigan_sana')
+        record.save()
+        return redirect('recordlar')
+    students = Student.objects.all().order_by('name')
+    books = Book.objects.all().order_by('title')
+    librarians = Librarian.objects.all().order_by('name')
     content = {
-        'record': record
+        'record': record,
+        'students': students,
+        'books': books,
+        'librarians': librarians
     }
     return render(request, 'record-update.html', content)
 

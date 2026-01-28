@@ -37,6 +37,7 @@ urlpatterns = [
     path('kitoblar/<int:pk>/update/', update_kitob_view, name='kitob-update'),
     path('recordlar/', records_view, name='recordlar'),
     path('recordlar/<int:record_id>/', record_view),
+    path('recordlar/<int:pk>/update', record_update_view, name='record-update'),
 
     path('tirik-mualliflar/', live_authors),
     path('katta-kitoblar/', big_books),
